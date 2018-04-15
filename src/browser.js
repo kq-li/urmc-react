@@ -1,5 +1,12 @@
 // @flow
-import React from 'react';
-import ReactDOM from 'react-dom';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
-ReactDOM.render(<div>Hello World!</div>, document.getElementById('root'));
+import App from './App.react';
+
+const app = <App />;
+const root = document.getElementById('root');
+
+if (root == null) throw new Error('Root element not found');
+
+ReactDOM.render(app, root);
