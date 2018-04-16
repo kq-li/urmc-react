@@ -4,17 +4,20 @@ import * as React from 'react';
 import type {Breed} from '../common/types';
 
 type Props = {
-  imageUrl: string
+  breed: Breed,
+  image: ?Object,
+  invalidated: boolean
 };
 
 class BreedDisplay extends React.Component<Props, any> {
   render(): React.Element<any> {
-    const url = this.props.imageUrl;
+    const className = `breed-display ${this.props.invalidated ? 'invalid' : ''}`;
     return (
-      <div>
-      {
-        url ? <img src={url} /> : null
-      }
+      <div className={className}>
+        <h2>Currently selected: {this.props.breed.name}</h2>
+        {
+          this.props.image ? this.props.image : null
+        }
     </div>
     );
   }

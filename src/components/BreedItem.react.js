@@ -21,8 +21,10 @@ class BreedItem extends React.Component<Props, any> {
   
   render(): React.Element<any> {
     return (
-      <div onClick={this.handleClick}>
-        {this.props.breed.name}
+      <div>
+        <a className="breed-item" onClick={this.handleClick}>
+          {this.props.breed.name}
+        </a>
       </div>
     );
   }

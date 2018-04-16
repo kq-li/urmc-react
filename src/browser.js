@@ -4,6 +4,8 @@ import * as ReactDOM from 'react-dom';
 
 import App from './App.react';
 
+require('./sass/global.scss');
+
 const app = <App />;
 const root = document.getElementById('root');
 

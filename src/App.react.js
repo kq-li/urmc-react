@@ -11,7 +11,8 @@ type Props = {};
 type State = {
   breeds: Breed[],
   selectedBreed: ?Breed,
-  imageUrl: ?string
+  image: ?Object,
+  invalidated: boolean
 };
 
 class App extends React.Component<Props, State> {
@@ -24,7 +25,8 @@ class App extends React.Component<Props, State> {
     this.state = {
       breeds: [],
       selectedBreed: null,
-      imageUrl: null
+      image: null,
+      invalidated: false
     };
   }
 
@@ -63,40 +65,43 @@ class App extends React.Component<Props, State> {
   };
 
   fetchImageUrl({breed, subbreed}: Breed): Promise<string> {
-    const breedUrlFrag = subbreed ? breed + '/' + breed : breed;
-    console.log(breedUrlFrag);
+    const breedUrlFrag = subbreed ? breed + '/' + subbreed : breed;
     return axios
       .get(`${this.apiUrl}/breed/${breedUrlFrag}/images/random`)
       .then(response => response.data.message);
   }
 
-  selectBreed = (selectedBreed: Breed) => {
-    console.log('setting state');
-    this.setState({selectedBreed});
-    this.fetchImageUrl(selectedBreed).then(imageUrl => {
-      this.setState({imageUrl});
+  validate = () => {
+    this.setState({
+      invalidated: false
     });
   };
 
+  selectBreed = (selectedBreed: Breed) => {
+    this.setState({
+      selectedBreed,
+      invalidated: true
+    });
+    this.fetchImageUrl(selectedBreed).then(imageUrl => {
+      this.setState({
+        image: <img src={imageUrl} onLoad={this.validate} />
+      });
+    });
+  };
   
   render(): React.Element<any> {
     return (
       <div>
-        <h1>Search dog breeds</h1>
+        <h1>Dogg</h1>
+        <h3>Search breeds</h3>
         <BreedSearch searchBreeds={this.searchBreeds}
                      selectBreed={this.selectBreed} />
         {
-          this.state.selectedBreed
-          ? (
-            <div>
-              <h1>Currently selected breed: {this.state.selectedBreed.name}</h1>
-              {
-                this.state.imageUrl
-                ? <BreedDisplay imageUrl={this.state.imageUrl} />
-                : null
-              }
-            </div>
-          ) : null
+          this.state.selectedBreed && this.state.image 
+          ? <BreedDisplay image={this.state.image}
+                          breed={this.state.selectedBreed}
+                          invalidated={this.state.invalidated} />
+          : null
         }
       </div>
     );
