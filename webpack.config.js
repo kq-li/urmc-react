@@ -1,6 +1,8 @@
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 
+const extractSass = new ExtractTextPlugin('css/styles.css');
 const definePlugin = new webpack.DefinePlugin({
   // change to 'production' for production apps
   'process.env.NODE_ENV': JSON.stringify('development')
@@ -32,6 +34,15 @@ module.exports = {
         exclude: /(node_modules)/,
         query: { presets: ['env', 'react', 'stage-2'] }
       },
+      { // Use extract-text-plugin for loading SASS files --> CSS file
+        test: /\.scss$/,
+        use: extractSass.extract({
+          use: [
+            { loader: 'css-loader' },
+            { loader: 'sass-loader' }
+          ]
+        })
+      },
       { // Use the following loader for images and gifs
         test: /\.jpe?g$|\.gif$|\.png$/i,
         loader: 'file-loader?name=images/[name].[ext]'
@@ -39,6 +50,7 @@ module.exports = {
     ]
   },
   plugins: [
+    extractSass,
     definePlugin,
     // uglifyJsPlugin
   ],
