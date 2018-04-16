@@ -6,7 +6,8 @@ import type {Breed} from '../common/types';
 import BreedItem from './BreedItem.react';
 
 type Props = {
-  searchBreeds: string => Promise<Breed[]>
+  searchBreeds: string => Breed[],
+  selectBreed: Breed => any
 };
 
 type State = {
@@ -29,10 +30,9 @@ class BreedSearch extends React.Component<Props, State> {
 
   handleInput = (event: Object) => {
     const query = event.target.value;
-    this.setState({query});
-    this.props.searchBreeds(query).then((breedNames: string[]) => {
-      const breeds = breedNames.map(name => ({name}));
-      this.setState({breeds});
+    this.setState({
+      query,
+      breeds: this.props.searchBreeds(query)
     });
   };
   
@@ -47,7 +47,8 @@ class BreedSearch extends React.Component<Props, State> {
         <div>
           {
             this.state.breeds.map((breed: Breed) => 
-              <BreedItem key={breed.name} breed={breed} />)
+              <BreedItem key={breed.name} breed={breed}
+                         selectBreed={this.props.selectBreed} />)
           }
         </div>
       </div>
