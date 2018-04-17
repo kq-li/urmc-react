@@ -9,9 +9,6 @@ Node.js 8 (and NPM), found [here](https://nodejs.org/en/download/)
 3. Run `npm start` to run the demo server
 4. Go to `localhost:8080` in your web browser
 
-## Editing
-`src/` contains all the React files we will be working with
-`src/App.react.js` is the starting point
 
 
 To see the completed project, switch to the `kenneth/completed-project` branch.
